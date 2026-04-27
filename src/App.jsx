@@ -1,39 +1,41 @@
 ﻿import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Brain, Lightbulb, Users, BarChart3, CheckCircle2, Languages, Sparkles } from 'lucide-react';
+import { Brain, Lightbulb, Users, BarChart3, Languages, Sparkles, ThumbsUp, ThumbsDown, MessageSquare } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer, Radar as RadarGraphic } from 'recharts';
 
 const translations = {
   ar: {
-    title: "مراقب الـ PsyCap الاستراتيجي",
-    subtitle: "أنسنة بيئات العمل الرقمية عبر الذكاء الاصطناعي",
+    title: "منصة PsyCap الذكية",
+    subtitle: "نحو بيئة عمل أكثر إنسانية",
     teamStrength: "قوة الفريق",
-    members: "أعضاء",
-    collectiveIndex: "مؤشر رأس المال النفسي الجماعي",
+    collectiveIndex: "مؤشر السعادة الجماعي",
     avg: "المعدل",
-    recommendation: "توصية الذكاء الاصطناعي الاستراتيجية",
-    motivationTitle: "دفعة إيجابية",
+    recommendation: "توصية الذكاء الاصطناعي",
+    feedbackTitle: "رأيك يهمنا",
+    objection: "اعتراض",
+    agree: "أوافق",
     hope: "الأمل", efficacy: "الكفاءة", resilience: "المرونة", optimism: "التفاؤل",
     statusMap: {
-      "High (Thriving)": { emoji: "🚀", msg: "أنت ملهم! استمر في قيادة التغيير ونشر طاقتك الإيجابية." },
-      "Moderate (Stable)": { emoji: "⚖️", msg: "أداء متزن وجميل. أنت تمتلك أساساً قوياً للنمو أكثر." },
-      "Low (At Risk)": { emoji: "🌱", msg: "تذكر أن البدايات الصعبة تصنع أبطالاً. نحن هنا لندعمك." }
+      "High (Thriving)": { emoji: "🌟", msg: "أنت شعلة نجاح في الفريق!" },
+      "Moderate (Stable)": { emoji: "🍃", msg: "توازنك هو سر استمرارك." },
+      "Low (At Risk)": { emoji: "💪", msg: "كل كبوة هي بداية لنهوض أقوى." }
     }
   },
   en: {
-    title: "PsyCap Strategic Monitor",
-    subtitle: "Humanizing Digital Workplaces via AI",
-    teamStrength: "Team Strength",
-    members: "Members",
-    collectiveIndex: "Collective PsyCap Index",
+    title: "PsyCap Smart Hub",
+    subtitle: "Humanizing Workplaces",
+    teamStrength: "Team Power",
+    collectiveIndex: "Collective Well-being",
     avg: "AVG",
-    recommendation: "AI Strategic Recommendation",
-    motivationTitle: "Positive Boost",
+    recommendation: "AI Insight",
+    feedbackTitle: "Your Feedback",
+    objection: "Dispute",
+    agree: "Agree",
     hope: "Hope", efficacy: "Efficacy", resilience: "Resilience", optimism: "Optimism",
     statusMap: {
-      "High (Thriving)": { emoji: "🚀", msg: "You are inspiring! Keep leading the change and spreading your energy." },
-      "Moderate (Stable)": { emoji: "⚖️", msg: "Steady and solid performance. You have a great foundation for growth." },
-      "Low (At Risk)": { emoji: "🌱", msg: "Remember, tough starts make legends. We are here to support you." }
+      "High (Thriving)": { emoji: "🌟", msg: "You are the team's shining star!" },
+      "Moderate (Stable)": { emoji: "🍃", msg: "Your balance is your superpower." },
+      "Low (At Risk)": { emoji: "💪", msg: "Every setback is a setup for a comeback." }
     }
   }
 };
@@ -54,75 +56,107 @@ function App() {
     : 0;
 
   return (
-    <div dir={lang === 'ar' ? 'rtl' : 'ltr'} style={{ padding: '40px', backgroundColor: '#f8fafc', minHeight: '100vh', fontFamily: 'Segoe UI, Tahoma, sans-serif' }}>
+    <div dir={lang === 'ar' ? 'rtl' : 'ltr'} style={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(135deg, #f472b6 0%, #fb923c 100%)', // خلفية متدرجة زهري لبرتقالي
+      padding: '20px',
+      fontFamily: "'Segoe UI', Roboto, sans-serif",
+      color: '#fff'
+    }}>
       
+      {/* زر اللغة الزجاجي */}
       <button 
         onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}
-        style={{ position: 'fixed', top: '20px', left: lang === 'ar' ? '20px' : 'auto', right: lang === 'en' ? '20px' : 'auto', padding: '10px 20px', borderRadius: '12px', border: '1px solid #e2e8f0', backgroundColor: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', zIndex: 1000, boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}
+        style={{ 
+          position: 'fixed', top: '15px', [lang === 'ar' ? 'left' : 'right']: '15px',
+          padding: '10px 15px', borderRadius: '50px', border: '1px solid rgba(255,255,255,0.3)',
+          background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', color: '#fff',
+          cursor: 'pointer', zIndex: 1000, display: 'flex', alignItems: 'center', gap: '8px'
+        }}
       >
-        <Languages size={18} /> {lang === 'ar' ? 'English' : 'العربية'}
+        <Languages size={18} /> {lang === 'ar' ? 'EN' : 'AR'}
       </button>
 
-      <header style={{ textAlign: 'center', marginBottom: '50px' }}>
-        <h1 style={{ color: '#0f172a', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '15px', fontSize: '2.5rem', fontWeight: '800' }}>
-          <Brain size={48} color='#3182ce'/> {t.title}
-        </h1>
-        <p style={{ color: '#64748b', fontSize: '1.2rem' }}>{t.subtitle}</p>
+      {/* الهيدر */}
+      <header style={{ textAlign: 'center', margin: '40px 0' }}>
+        <div style={{ background: 'rgba(255,255,255,0.2)', padding: '20px', borderRadius: '30px', backdropFilter: 'blur(15px)', display: 'inline-block' }}>
+          <h1 style={{ margin: 0, fontSize: '2rem', display: 'flex', alignItems: 'center', gap: '15px', justifyContent: 'center' }}>
+            <Brain size={40} /> {t.title}
+          </h1>
+          <p style={{ margin: '10px 0 0', opacity: 0.9 }}>{t.subtitle}</p>
+        </div>
       </header>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '25px', marginBottom: '50px' }}>
-        <StatCard icon={<Users color='#3182ce'/>} title={t.teamStrength} value={`${employees.length} ${t.members}`} color="#ebf8ff" />
-        <StatCard icon={<BarChart3 color='#38a169'/>} title={t.collectiveIndex} value={`${teamAvg} / 5.0`} color="#f0fff4" />
+      {/* الإحصائيات (متجاوبة) */}
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', 
+        gap: '15px', maxWidth: '900px', margin: '0 auto 40px' 
+      }}>
+        <GlassCard icon={<Users />} title={t.teamStrength} value={employees.length} />
+        <GlassCard icon={<BarChart3 />} title={t.avg} value={teamAvg} />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '35px' }}>
+      {/* قائمة الموظفين */}
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+        gap: '25px', maxWidth: '1200px', margin: '0 auto' 
+      }}>
         {employees.map(emp => {
           const mood = t.statusMap[emp.status] || t.statusMap["Moderate (Stable)"];
           return (
-            <div key={emp.id} style={{ backgroundColor: 'white', padding: '35px', borderRadius: '32px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', border: '1px solid #edf2f7', transition: 'transform 0.3s' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px' }}>
+            <div key={emp.id} style={{ 
+              background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(20px)',
+              borderRadius: '40px', padding: '25px', border: '1px solid rgba(255,255,255,0.2)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', gap: '20px'
+            }}>
+              {/* رأس الكارت */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
-                  <h2 style={{ margin: 0, color: '#1e293b', fontSize: '24px' }}>
-                    {mood.emoji} {emp.name}
-                  </h2>
-                  <span style={{ fontSize: '14px', color: '#64748b' }}>{emp.status}</span>
+                  <h2 style={{ margin: 0, fontSize: '1.5rem' }}>{mood.emoji} {emp.name}</h2>
+                  <span style={{ fontSize: '0.9rem', opacity: 0.8 }}>{emp.status}</span>
                 </div>
-                <div style={{ textAlign: lang === 'ar' ? 'left' : 'right' }}>
-                  <h3 style={{ margin: 0, color: '#2d3748', fontSize: '28px' }}>{emp.average_score}</h3>
-                  <p style={{ fontSize: '10px', color: '#a0aec0', fontWeight: 'bold' }}>{t.avg}</p>
+                <div style={{ background: 'rgba(255,255,255,0.3)', padding: '5px 15px', borderRadius: '20px' }}>
+                  <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{emp.average_score}</span>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '30px', alignItems: 'center', flexDirection: lang === 'ar' ? 'row-reverse' : 'row' }}>
-                <div style={{ flex: 1, height: '240px' }}>
-                  <ResponsiveContainer>
-                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={[{s:t.hope,v:emp.hope},{s:t.efficacy,v:emp.efficacy},{s:t.resilience,v:emp.resilience},{s:t.optimism,v:emp.optimism}]}>
-                      <PolarGrid stroke='#e2e8f0' /><PolarAngleAxis dataKey='s' tick={{fontSize: 12}} />
-                      <RadarGraphic dataKey='v' stroke='#3182ce' fill='#3182ce' fillOpacity={0.5} isAnimationActive={false} />
-                    </RadarChart>
-                  </ResponsiveContainer>
-                </div>
-                <div style={{ flex: 1 }}>
-                  <ProgressItem label={t.hope} value={emp.hope} color="#3182ce" />
-                  <ProgressItem label={t.efficacy} value={emp.efficacy} color="#38a169" />
-                  <ProgressItem label={t.resilience} value={emp.resilience} color="#ed8936" />
-                  <ProgressItem label={t.optimism} value={emp.optimism} color="#9f7aea" />
-                </div>
-              </div>
-              
-              {/* رسالة التحفيز */}
-              <div style={{ marginTop: '25px', padding: '15px', backgroundColor: '#fdf2f8', borderRadius: '15px', border: '1px dashed #f472b6' }}>
-                <p style={{ margin: 0, color: '#be185d', fontSize: '14px', fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Sparkles size={16} /> {mood.msg}
-                </p>
+              {/* الرسم البياني (تم تصغيره للموبايل) */}
+              <div style={{ height: '200px', width: '100%' }}>
+                <ResponsiveContainer>
+                  <RadarChart cx="50%" cy="50%" outerRadius="70%" data={[
+                    {s:t.hope,v:emp.hope},{s:t.efficacy,v:emp.efficacy},{s:t.resilience,v:emp.resilience},{s:t.optimism,v:emp.optimism}
+                  ]}>
+                    <PolarGrid stroke="rgba(255,255,255,0.3)" />
+                    <PolarAngleAxis dataKey="s" tick={{ fill: '#fff', fontSize: 10 }} />
+                    <RadarGraphic dataKey="v" stroke="#fff" fill="#fff" fillOpacity={0.4} />
+                  </RadarChart>
+                </ResponsiveContainer>
               </div>
 
-              <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#f8fafc', borderRadius: '20px', borderRight: lang === 'ar' ? '6px solid #3182ce' : 'none', borderLeft: lang === 'en' ? '6px solid #3182ce' : 'none' }}>
-                <h4 style={{ margin: '0 0 10px 0', color: '#3182ce', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Lightbulb size={20}/> {t.recommendation}
+              {/* أشرطة التقدم مع أزرار التفاعل */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <ProgressWithAction label={t.hope} value={emp.hope} t={t} />
+                <ProgressWithAction label={t.efficacy} value={emp.efficacy} t={t} />
+                <ProgressWithAction label={t.resilience} value={emp.resilience} t={t} />
+                <ProgressWithAction label={t.optimism} value={emp.optimism} t={t} />
+              </div>
+
+              {/* رسالة تحفيزية */}
+              <div style={{ padding: '12px', background: 'rgba(255,255,255,0.2)', borderRadius: '20px', fontSize: '0.9rem', fontStyle: 'italic', textAlign: 'center' }}>
+                <Sparkles size={16} style={{ verticalAlign: 'middle', margin: '0 5px' }} /> {mood.msg}
+              </div>
+
+              {/* التوصية الذكية */}
+              <div style={{ background: 'rgba(0,0,0,0.1)', padding: '15px', borderRadius: '25px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <h4 style={{ margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: '8px', color: '#fff' }}>
+                  <Lightbulb size={18} /> {t.recommendation}
                 </h4>
-                <p style={{ margin: 0, fontSize: '15px', fontWeight: '600', color: '#334155' }}>
-                  {emp.average_score < 3 ? (lang === 'ar' ? "يحتاج لدعم في بناء المرونة والأمل" : "Needs support in building resilience and hope") : (lang === 'ar' ? "استمر في تعزيز مهارات القيادة الإيجابية" : "Continue enhancing positive leadership skills")}
+                <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: '1.4' }}>
+                  {emp.average_score < 3 
+                    ? (lang === 'ar' ? "🚨 الموظف يحتاج لدعم معنوي وجلسة استماع لتعزيز طاقة الأمل." : "🚨 Employee needs moral support and a listening session to boost hope.")
+                    : (lang === 'ar' ? "✨ بطل! استمر في تفويض مهام أكبر لهذا الموظف لتعزيز كفاءته." : "✨ Champion! Delegate more significant tasks to this employee to boost efficacy.")}
                 </p>
               </div>
             </div>
@@ -133,20 +167,46 @@ function App() {
   );
 }
 
-const StatCard = ({ icon, title, value, color }) => (
-  <div style={{ backgroundColor: 'white', padding: '30px', borderRadius: '24px', boxShadow: '0 4px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '25px', border: '1px solid #edf2f7' }}>
-    <div style={{ backgroundColor: color, padding: '15px', borderRadius: '15px' }}>{icon}</div>
-    <div><p style={{ margin: 0, fontSize: '14px', color: '#718096' }}>{title}</p><h3 style={{ margin: 0, color: '#1e293b', fontSize: '22px', fontWeight: 'bold' }}>{value}</h3></div>
+// مكون كارت إحصائي زجاجي
+const GlassCard = ({ icon, title, value }) => (
+  <div style={{ 
+    background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', 
+    padding: '15px', borderRadius: '25px', textAlign: 'center', border: '1px solid rgba(255,255,255,0.2)' 
+  }}>
+    <div style={{ fontSize: '1.5rem', marginBottom: '5px' }}>{icon}</div>
+    <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>{title}</div>
+    <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{value}</div>
   </div>
 );
 
-const ProgressItem = ({ label, value, color }) => (
-  <div style={{ marginBottom: '15px' }}>
-    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px', color: '#4a5568' }}><span>{label}</span><span>{value}/5</span></div>
-    <div style={{ width: '100%', height: '8px', backgroundColor: '#edf2f7', borderRadius: '10px', overflow: 'hidden' }}>
-      <div style={{ width: `${Math.min((value/5)*100, 100)}%`, height: '100%', backgroundColor: color, borderRadius: '10px' }} />
+// مكون شريط التقدم مع أزرار Like/Dislike
+const ProgressWithAction = ({ label, value, t }) => {
+  const [liked, setLiked] = useState(null);
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
+        <span>{label}</span>
+        <span>{value}/5</span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ flex: 1, height: '8px', background: 'rgba(255,255,255,0.2)', borderRadius: '10px', overflow: 'hidden' }}>
+          <div style={{ width: `${(value / 5) * 100}%`, height: '100%', background: '#fff', borderRadius: '10px' }} />
+        </div>
+        <div style={{ display: 'flex', gap: '5px' }}>
+          <ThumbsUp 
+            size={16} 
+            style={{ cursor: 'pointer', color: liked === true ? '#4ade80' : '#fff', opacity: liked === true ? 1 : 0.6 }} 
+            onClick={() => setLiked(true)}
+          />
+          <ThumbsDown 
+            size={16} 
+            style={{ cursor: 'pointer', color: liked === false ? '#f87171' : '#fff', opacity: liked === false ? 1 : 0.6 }} 
+            onClick={() => setLiked(false)}
+          />
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default App;
